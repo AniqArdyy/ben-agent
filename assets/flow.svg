@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 260" font-family="Inter,system-ui,sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#34f5a0"/></marker></defs>
+<rect width="1000" height="260" rx="20" fill="#08120f"/>
+<g fill="#0b1714" stroke="rgba(120,200,170,.35)" stroke-width="1.5">
+<rect x="20" y="95" width="150" height="70" rx="14"/><rect x="205" y="95" width="150" height="70" rx="14"/><rect x="390" y="95" width="150" height="70" rx="14"/>
+<rect x="590" y="30" width="170" height="62" rx="14" stroke="#34d399"/><rect x="590" y="168" width="170" height="62" rx="14" stroke="#fbbf24"/>
+<rect x="810" y="95" width="170" height="70" rx="14"/></g>
+<g fill="#e6f4ee" font-size="17" font-weight="700" text-anchor="middle">
+<text x="95" y="127">Scan</text><text x="280" y="127">Screen</text><text x="465" y="127">Rug check</text>
+<text x="675" y="58" fill="#34d399">GREEN · farm</text><text x="675" y="196" fill="#fbbf24">YELLOW · scalp</text><text x="895" y="127">Exit &amp; learn</text></g>
+<g fill="#8fa9a0" font-size="12" text-anchor="middle">
+<text x="95" y="148">pools + trending seed</text><text x="280" y="148">fees · volume · momentum</text><text x="465" y="148">hard blocks + holders</text>
+<text x="675" y="78">hold for fees · TP ~+12%</text><text x="675" y="216">fast · TP ~+4% · SL −8%</text><text x="895" y="148">local lessons</text></g>
+<text x="465" y="200" fill="#fb7185" font-size="12" text-anchor="middle">RED → never deployed</text>
+<g stroke="#34f5a0" stroke-width="2" fill="none" marker-end="url(#a)">
+<path d="M170 130H203"/><path d="M355 130H388"/><path d="M540 120L588 66"/><path d="M540 140L588 196"/><path d="M760 61L808 115"/><path d="M760 199L808 145"/></g>
+</svg>
