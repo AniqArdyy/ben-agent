@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ben Agent — Autonomous Meteora DLMM LP agent on Solana</title>
+<meta name="description" content="Ben Agent is an autonomous liquidity-providing agent for Meteora DLMM pools on Solana, controlled from Telegram and a mini app.">
+<link rel="icon" href="assets/ben_logo_white.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050b09;--bg2:#08120f;--card:#0b1714;--card2:#0f1f1a;--line:rgba(120,200,170,.12);--line2:rgba(120,200,170,.2);--tx:#e6f4ee;--sub:#8fa9a0;--mut:#5d756d;--ac:#34f5a0;--ac2:#22d3ee;--up:#34d399;--down:#fb7185;--warn:#fbbf24;--r:16px;--sh:0 1px 0 rgba(255,255,255,.03) inset,0 8px 24px rgba(0,0,0,.35)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:radial-gradient(900px 500px at 85% -10%,rgba(52,245,160,.08),transparent 60%),radial-gradient(700px 400px at -10% 0%,rgba(34,211,238,.06),transparent 60%),var(--bg);color:var(--tx);font:16px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--ac);text-decoration:none}img{max-width:100%;display:block}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+nav.top{position:sticky;top:0;z-index:10;background:rgba(5,11,9,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}.brand img{height:26px}
+.links{display:flex;gap:22px;font-size:14px}.links a{color:var(--sub)}.links a:hover{color:var(--tx)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:700;font-size:15px;border:1px solid var(--line2);color:var(--tx);background:var(--card)}
+.btn.p{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#04140d;border:0;box-shadow:0 0 24px rgba(52,245,160,.25)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.06em;padding:5px 11px;border-radius:999px;border:1px solid rgba(52,245,160,.35);color:var(--ac);background:rgba(52,245,160,.07)}
+.pill:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.y{color:var(--warn);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.07)}.pill.r{color:var(--down);border-color:rgba(251,113,133,.35);background:rgba(251,113,133,.07)}
+.hero{padding:80px 0 60px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+h1{font-size:54px;line-height:1.08;letter-spacing:-.03em;font-weight:800;margin:18px 0}
+h1 span,.grad{background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--sub);font-size:18px;max-width:560px}.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+section{padding:72px 0;border-top:1px solid var(--line)}
+.eyebrow{color:var(--ac);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+h2{font-size:36px;letter-spacing:-.02em;margin:8px 0 12px;line-height:1.15}.sec-lead{color:var(--sub);max-width:720px;margin-bottom:36px}
+.grid{display:grid;gap:18px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--sh)}
+.card h3{font-size:17px;margin-bottom:6px}.card p,.card li{color:var(--sub);font-size:14.5px}.card ul{padding-left:18px;margin-top:8px}.card li{margin:4px 0}
+.card.green{border-color:rgba(52,211,153,.4)}.card.yellow{border-color:rgba(251,191,36,.4)}.card.red{border-color:rgba(251,113,133,.35)}
+.kv{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.chip{font-size:12.5px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid var(--line2);color:var(--sub)}.chip b{color:var(--tx)}
+figure{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:var(--sh)}
+figure img{border-radius:12px;border:1px solid var(--line);width:100%}
+figcaption{padding:12px 4px 2px;color:var(--sub);font-size:14px}figcaption b{color:var(--tx);display:block;font-size:15px;margin-bottom:2px}
+.demo{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--warn);border:1px solid rgba(251,191,36,.35);border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.hero figure{max-width:380px;justify-self:center;transform:rotate(1.5deg)}
+.shots{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.split figure{max-width:420px;justify-self:center}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+.src{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:18px 0}.src div{padding:12px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-weight:600;font-size:14px}.src small{display:block;color:var(--mut);font-weight:500;font-size:12px}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:10px}summary{cursor:pointer;font-weight:700}details p{color:var(--sub);margin-top:10px;font-size:15px}
+footer{border-top:1px solid var(--line);padding:40px 0 60px;color:var(--mut);font-size:13.5px}
+.risk{background:rgba(251,113,133,.05);border:1px solid rgba(251,113,133,.25);border-radius:14px;padding:18px;color:var(--sub);margin-bottom:24px}.risk b{color:var(--down)}
+@media(max-width:960px){.hero,.split{grid-template-columns:1fr}.g3,.g4,.shots{grid-template-columns:1fr 1fr}h1{font-size:42px}.links{display:none}}
+@media(max-width:600px){.g2,.g3,.g4,.shots{grid-template-columns:1fr}h1{font-size:34px}h2{font-size:28px}.hero{padding:48px 0 32px}section{padding:52px 0}.wrap{padding:0 18px}.hero figure{transform:none}}
+</style></head><body>
+<nav class="top"><div class="wrap"><a class="brand" href="#"><img src="assets/ben_logo_white.png" alt="Ben logo"> <span>Agent</span></a>
+<div class="links"><a href="#find">How it finds</a><a href="#slots">Slots</a><a href="#safety">Rug protection</a><a href="#dash">Dashboard</a><a href="#faq">FAQ</a></div>
+<a class="btn p" href="https://t.me/bensoll_bot">Open in Telegram</a></div></nav>
+
+<main class="wrap">
+<div class="hero">
+ <div><span class="pill">Meteora DLMM · Solana · 24/7</span>
+ <h1>An autonomous LP agent that hunts <span>hot, high-fee pools</span> early.</h1>
+ <p class="lead">Ben Agent scans Meteora DLMM pools around the clock, screens trending tokens for momentum and rug risk, and runs two strategy slots: a patient fee farm and a fast scalp. You control everything from Telegram <b>@bensoll_bot</b> and its mini app.</p>
+ <div class="cta"><a class="btn p" href="https://t.me/bensoll_bot">Start @bensoll_bot</a><a class="btn" href="#how">See how it works</a></div></div>
+ <figure><img src="assets/dashboard.png" alt="Ben Agent mini app overview screen" width="489" height="1024">
+ <figcaption><b>Overview with LIVE pill <span class="demo">DEMO DATA</span></b>The header shows the live mode (LIVE or DRY RUN) and preset, plus realized PnL since the 08:00 WIB reset. The animated agent shows what it is working on right now.</figcaption></figure>
+</div>
+
+<section id="how"><span class="eyebrow">Pipeline</span><h2>From scan to exit, in one loop</h2>
+<p class="sec-lead">Every cycle runs the same pipeline. Pools that fail a hard safety block are tagged RED and are never deployed.</p>
+<figure><img src="assets/flow.svg" alt="Flow diagram: scan, screen, rug check, GREEN or YELLOW slot, exit and learn"><figcaption><b>The decision flow</b>Scan pools and trending tokens → screen fees, volume and momentum → rug check → assign a GREEN (farm) or YELLOW (scalp) slot → exit by strategy and record the lesson locally.</figcaption></figure></section>
+
+<section id="find"><span class="eyebrow">Discovery</span><h2>How it finds tokens</h2>
+<p class="sec-lead">The agent combines several live data sources, so trending tokens show up on its radar instead of being missed by a single feed.</p>
+<div class="src"><div>Meteora<small>DLMM pools &amp; fees</small></div><div>DexScreener<small>price, volume, tx</small></div><div>GMGN<small>trending signals</small></div><div>Jupiter<small>trending list</small></div><div>GeckoTerminal<small>OHLCV &amp; ATH</small></div><div>RugCheck<small>token risk</small></div><div>Helius<small>on-chain holders</small></div></div>
+<div class="grid g3">
+<div class="card"><h3>Trending seed</h3><p>Tokens trending on GMGN and Jupiter go straight onto the radar, so new, hot tokens get screened as soon as they appear.</p></div>
+<div class="card"><h3>Volume score boost</h3><p>Tokens with about <b>$800K+ 1h volume</b> get a large score bonus. It's a boost, not a requirement, so the agent keeps finding opportunities.</p></div>
+<div class="card"><h3>Momentum signals</h3><p>It checks volume pace, transaction count, price trend, 5-minute bursts and trending status. A pool needs several signals before entry.</p></div>
+</div></section>
+
+<section id="slots"><span class="eyebrow">Strategy</span><h2>Two slots, two playbooks</h2>
+<p class="sec-lead">The agent holds at most <b>2 positions</b> at once. Each slot has its own rules.</p>
+<div class="split"><div class="grid">
+<div class="card green"><span class="pill">GREEN · Farm</span><h3 style="margin-top:12px">Hold for fees</h3><p>Safer pools with a high fee bar. The agent holds them longer to collect fees.</p><div class="kv"><span class="chip">Min hold <b>45 min</b></span><span class="chip">Take profit <b>~+12%</b></span><span class="chip">Fee filter <b>strict</b></span></div></div>
+<div class="card yellow"><span class="pill y">YELLOW · Scalp</span><h3 style="margin-top:12px">In fast, out fast</h3><p>Looser filters for hot, riskier tokens. Only the hard rug blocks still apply.</p><div class="kv"><span class="chip">Take profit <b>~+4%</b></span><span class="chip">Stop loss <b>−8%</b></span><span class="chip">Max hold <b>45 min</b></span></div></div>
+<div class="card red"><span class="pill r">RED · Never</span><p style="margin-top:10px">Pools that fail hard safety checks are logged and skipped. The agent never deploys into them.</p></div>
+</div>
+<figure><img src="assets/positions.png" alt="Portfolio screen with GREEN and YELLOW positions"><figcaption><b>Portfolio: GREEN &amp; YELLOW slots <span class="demo">DEMO DATA</span></b>Each active position shows its slot, range status, value, fees earned and PnL, along with risk status and slot usage (2/2).</figcaption></figure>
+</div></section>
+
+<section id="safety"><span class="eyebrow">Safety</span><h2>Rug protection, always on</h2>
+<p class="sec-lead">Hard blocks run before any deploy, and exit guards keep watching while a position is open.</p>
+<div class="grid g4">
+<div class="card"><h3>Hard blocks</h3><ul><li>Honeypot</li><li>Mint or freeze authority active</li><li>Unlocked LP</li><li>Already rugged</li><li>Meteora blacklist</li></ul></div>
+<div class="card"><h3>Holder checks</h3><ul><li>Bundle detection</li><li>Insider share</li><li>Top-holder concentration</li><li>Any single wallet &gt;50% → blocked</li></ul></div>
+<div class="card"><h3>Live guards</h3><ul><li>Dump guard on sharp 1h drops</li><li>Fast rug exit: price −15% in 5 min</li><li>or liquidity −50% in 10 min</li></ul></div>
+<div class="card"><h3>Cost guard</h3><ul><li>Skips pools that need non-refundable bin-array rent</li></ul></div>
+</div></section>
+
+<section><span class="eyebrow">Positioning</span><h2>How positions are placed</h2>
+<div class="grid g3">
+<div class="card"><h3>Spot strategy, Degen mode</h3><p>Liquidity is spread evenly across the range. The strategy is locked to Spot.</p></div>
+<div class="card"><h3>ATH-based range</h3><p>The range reaches at least <b>−60% from the token's ATH</b>, capped at <b>−90%</b>, so the position stays useful through deep pullbacks.</p></div>
+<div class="card"><h3>Auto add liquidity</h3><p>When price nears the edge of the range, the agent can add <b>1 SOL</b>, up to a <b>2 SOL</b> maximum per position.</p></div>
+</div></section>
+
+<section><div class="split">
+<div><span class="eyebrow">Learning</span><h2>Learns from every closed position</h2><p class="sec-lead">Each closed position is recorded and analysed on your own server. The lessons feed back into screening so the same mistakes aren't repeated. No external learning service, and your data never leaves your machine.</p></div>
+<figure><img src="assets/pnl-card.png" alt="Ben Agent position closed PnL card"><figcaption><b>Position-closed PnL card <span class="demo">DEMO DATA</span></b>Sent to Telegram when a position closes: PnL in SOL, USD and %, fees, deposit and hold time. PnL is measured against the SOL you deposited.</figcaption></figure>
+</div></section>
+
+<section id="dash"><span class="eyebrow">Mini app</span><h2>Dashboard &amp; control</h2>
+<p class="sec-lead">Everything runs from Telegram. The mini app shows what the agent is doing and why.</p>
+<div class="shots">
+<figure><img src="assets/dashboard.png" alt="Overview screen"><figcaption><b>Overview <span class="demo">DEMO DATA</span></b>Daily realized PnL, reset at 08:00 WIB, plus the LIVE / DRY RUN pill.</figcaption></figure>
+<figure><img src="assets/activity.png" alt="Activity log"><figcaption><b>Activity log <span class="demo">DEMO DATA</span></b>A real-time work log: safety checks, screening, PnL monitoring, range checks and exits, each with its reason.</figcaption></figure>
+<figure><img src="assets/positions.png" alt="Portfolio"><figcaption><b>Portfolio <span class="demo">DEMO DATA</span></b>Floating PnL, unclaimed fees, risk status and active positions per slot.</figcaption></figure>
+<figure><img src="assets/settings.png" alt="Settings"><figcaption><b>Settings <span class="demo">DEMO DATA</span></b>The Dry Run toggle applies instantly. Also covers the mode, position size and screening filters.</figcaption></figure>
+</div>
+<div class="grid g3" style="margin-top:24px">
+<div class="card"><h3>Honest PnL</h3><p>PnL is calculated from the SOL you deposited, not pool TVL, with a daily reset at 08:00 WIB.</p></div>
+<div class="card"><h3>Instant DRY RUN / LIVE</h3><p>Switch between simulation and live trading from the mini app. The header pill always shows the real mode.</p></div>
+<div class="card"><h3>Verified, non-root install</h3><p>The installer verifies the code it installs and stops if an old version is detected. It runs as a normal user, no root needed.</p></div>
+</div></section>
+
+<section id="faq"><span class="eyebrow">FAQ</span><h2>Questions</h2>
+<details><summary>Does Ben Agent hold my private key?</summary><p>The agent runs on your own server. Your wallet key stays in your local environment file and is never shared with us or sent through chat. Never paste keys into Telegram or screenshots.</p></details>
+<details><summary>Can I test without real money?</summary><p>Yes. Turn on Dry Run in Settings and the agent simulates decisions without sending transactions. The header pill shows DRY RUN.</p></details>
+<details><summary>How many positions does it open?</summary><p>At most two: one GREEN (farm) slot and one YELLOW (scalp) slot.</p></details>
+<details><summary>Does it guarantee profit?</summary><p>No. LP on volatile tokens can lose money through price moves, impermanent loss and rugs. The safety checks reduce risk but can't remove it.</p></details>
+<details><summary>Does it run all the time?</summary><p>Yes, it runs 24/7 on your VPS under a process manager and reports to Telegram.</p></details>
+</section>
+</main>
+<footer><div class="wrap">
+<div class="risk"><b>Risk disclaimer.</b> Ben Agent is experimental software. Providing liquidity to memecoin and low-cap pools is highly risky, and you can lose some or all of your funds. Nothing on this site is financial advice. No performance or profit is promised. All screenshots use demo data. Only use funds you can afford to lose.</div>
+<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px"><span class="brand"><img src="assets/ben_logo_white.png" alt="Ben"> Agent</span><span>Telegram: <a href="https://t.me/bensoll_bot">@bensoll_bot</a> · Meteora DLMM on Solana</span></div>
+</div></footer>
+</body></html>
